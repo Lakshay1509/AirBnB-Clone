@@ -6,8 +6,15 @@ const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpassword, setconfirmPassword] = useState("");
 
   function registerUser(e) {
+
+    if(password !== confirmpassword){
+      alert("Passwords do not match")
+      setconfirmPassword("")
+      return
+    }
 
     try {
       e.preventDefault()
@@ -45,6 +52,10 @@ const RegisterPage = () => {
           <input type="password" placeholder="Password" 
 
           value={password} onChange={e=>setPassword(e.target.value)}
+          />
+          <input type="password" placeholder="Confirm Password" 
+
+          value={confirmpassword} onChange={e=>setconfirmPassword(e.target.value)}
           />
 
 
