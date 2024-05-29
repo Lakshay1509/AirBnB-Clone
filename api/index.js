@@ -1,29 +1,21 @@
-import express from 'express';
-import cors from 'cors';
-
-const app = express();
-
-
-app.use(express.json());
+import dotenv from "dotenv";
+import connect from "./db/index.js";
+import app from "./app.js";
 
 
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials:true,
-}))
-
-
-app.get('/test', (req, res) => {
-  res.json('Hello World!');
-}); 
-
-app.post('/register', (req, res) => {
-    const { name, email, password } = req.body;
-    //connect database
+dotenv.config({
+    path: '.env'
 });
 
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+
+connect()
+.then(()=>{
+    app.listen(process.env.PORT || 3000,()=>{
+        console.log(`Server is running on port ${process.env.PORT}`)
+    })
+})
+.catch((err)=>{
+    console.log(err)
+
+})
