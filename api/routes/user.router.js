@@ -1,6 +1,8 @@
 import {Router} from 'express';
 
-import {loginUser, registerUser} from '../controller/user.controller.js';
+import {loginUser, registerUser, getUserProfile} from '../controller/user.controller.js';
+
+import {verifyJWT} from '../middleware/auth.middleware.js';
 
 
 const router = Router();
@@ -14,5 +16,7 @@ router.route("/login").post(
         
         loginUser
 )
+
+router.route("/profile").get(getUserProfile)
 
 export default router;
