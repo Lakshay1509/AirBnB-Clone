@@ -5,18 +5,6 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
-const generateAccessAndRefreshToken = async (userId) => {
-  try {
-    const user = await User.findById(userId);
-    const access = user.generateAccessToken();
-    const refresh = user.generateRefreshToken();
-    user.refreshToken = refresh; // Fixed typo
-    await user.save({ validateBeforeSave: false });
-    return { access, refresh };
-  } catch (error) {
-    throw new ApiError(500, "Error generating token");
-  }
-};
 
 const registerUser = asyncHandler(async (req, res) => {
   const { email, name, password } = req.body;
@@ -36,7 +24,7 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
-  const createdUser = await User.findById(user._id).select("-password -refreshToken");
+  const createdUser = await User.findById(user._id).select("-password");
 
   if (!createdUser) {
     throw new ApiError(500, "Error creating user");
@@ -49,47 +37,56 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
+    console.log("Email or password not provided");
     throw new ApiError(400, "Please provide email and password");
   }
 
   const user = await User.findOne({ email });
 
   if (!user) {
+    console.log("User not found");
     throw new ApiError(404, "Invalid credentials");
   }
 
   const isPasswordCorrect = await user.isPasswordCorrect(password);
 
   if (!isPasswordCorrect) {
+    console.log("Password incorrect");
     throw new ApiError(401, "Invalid credentials");
   }
 
-  const { access, refresh } = await generateAccessAndRefreshToken(user._id);
+  jwt.sign(
+    { email: user.email, id: user._id ,name:user.name},
+    process.env.ACCESS_TOKEN_SECRET,
+    {},
+    (err, token) => {
+      if (err) {
+        console.log("JWT sign error", err);
+        throw err;
+      }
 
-  const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
-
-  const options = {
-    httpOnly: true,
-    secure: true,
-    sameSite: "Strict",
-  };
-
-  return res.status(200)
-    .cookie("access", access, options)
-    .cookie("refresh", refresh, options)
-    .json(new ApiResponse(200, {
-      user: loggedInUser, access, refresh
-    }, "User logged in successfully"));
+      console.log("User logged in successfully", user);
+      res.cookie('token', token).json(new ApiResponse(200, "User logged in successfully", user));
+    }
+  );
 });
 
+
 const getUserProfile = asyncHandler(async (req, res) => {
-  const token = req.cookies.access;
+  const token = req.cookies.token;
 
   if (!token) {
     throw new ApiError(401, "Unauthorized");
   }
 
-  res.status(200).json(new ApiResponse(200, "User profile fetched successfully", token));
+  jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,{},(err,data)=>{
+    if(err){
+      throw new ApiError(401, "Unauthorized");
+    }
+    
+    return res.status(200).json(new ApiResponse(200, "User profile fetched successfully", data.name));
+
+  })
 });
 
-export { registerUser, loginUser, getUserProfile };
+export { registerUser, loginUser,getUserProfile };

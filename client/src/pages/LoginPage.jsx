@@ -11,24 +11,24 @@ const LoginPage = () => {
 
  const {setUser} = useContext(UserContext);
 
-  async function handleSubmit(e) {
+ async function handleSubmit(e) {
+  
+  try {
+    e.preventDefault();
+    const user =await axios.post("/api/v1/users/login", {
+      email,
+      password
+    });
     
-    e.preventDefault()
-    
-    try{
-       const userInfo = await axios.post("/api/v1/users/login", {
-        email,
-        password
-      });
-
-      console.log(userInfo.data.message.user.name)
-      setUser(userInfo.data.message.user.name)
-      setRedirect(true)
-    }
-    catch(error){
-      alert("Error logging in",error)
-    }
+    setRedirect(true);
+    console.log(user.data.data.name)
+    setUser(user.data.data.name);
+  } catch (error) {
+    console.error("Error logging in", error);
+    alert("Error logging in");
   }
+}
+
 
 
   if(redirect){

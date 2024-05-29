@@ -8,18 +8,17 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmpassword, setconfirmPassword] = useState("");
 
-  function registerUser(e) {
+  async function registerUser(e) {
 
     if(password !== confirmpassword){
       alert("Passwords do not match")
       setconfirmPassword("")
-      return
     }
 
     try {
       e.preventDefault()
       
-      axios.post("/api/v1/users/register", {
+      await axios.post("/api/v1/users/register", {
         name,
         email,
         password
