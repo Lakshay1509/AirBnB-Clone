@@ -9,13 +9,23 @@ const RegisterPage = () => {
 
   function registerUser(e) {
 
-    e.preventDefault()
-    
-    axios.post("/register", {
-      name,
-      email,
-      password
-    })
+    try {
+      e.preventDefault()
+      
+      axios.post("/api/v1/users/register", {
+        name,
+        email,
+        password
+      });
+      alert("User registered successfully")
+      setName("")
+      setEmail("")
+      setPassword("")
+    } catch (error) {
+      alert("Error registering user")
+      
+    }
+
   }
 
   return (
