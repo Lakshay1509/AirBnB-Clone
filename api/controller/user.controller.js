@@ -84,7 +84,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       throw new ApiError(401, "Unauthorized");
     }
     
-    return res.status(200).json(new ApiResponse(200, "User profile fetched successfully", data.name));
+    return res.status(200).json(new ApiResponse(200, "User profile fetched successfully", data));
 
   })
 });
