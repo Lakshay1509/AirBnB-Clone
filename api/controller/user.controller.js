@@ -89,4 +89,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
   })
 });
 
-export { registerUser, loginUser,getUserProfile };
+const logout = asyncHandler(async (req, res) => {
+  res.cookie('token','').json(new ApiResponse(200, "User logged out successfully", null));
+});
+
+export { registerUser, loginUser,getUserProfile ,logout};

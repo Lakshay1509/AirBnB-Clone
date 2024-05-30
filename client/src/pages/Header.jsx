@@ -79,7 +79,7 @@ const Header = () => {
           </div>
           {!!user && (
             <div>
-              {user.toUpperCase()}
+              {user}
             </div>
           )}
         </Link>

@@ -9,7 +9,7 @@ const LoginPage = () => {
 
   const [redirect, setRedirect] = React.useState(false);
 
- const {setUser} = useContext(UserContext);
+ const {setUser,setReady,setemail} = useContext(UserContext);
 
  async function handleSubmit(e) {
   
@@ -21,8 +21,9 @@ const LoginPage = () => {
     });
     
     setRedirect(true);
-    console.log(user.data.data.name)
+    setReady(true);
     setUser(user.data.data.name);
+    setemail(user.data.data.email);
   } catch (error) {
     console.error("Error logging in", error);
     alert("Error logging in");
