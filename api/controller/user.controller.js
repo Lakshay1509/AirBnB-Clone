@@ -65,7 +65,7 @@ const loginUser = asyncHandler(async (req, res) => {
         throw err;
       }
 
-      console.log("User logged in successfully", user);
+      
       res.cookie('token', token).json(new ApiResponse(200, "User logged in successfully", user));
     }
   );
