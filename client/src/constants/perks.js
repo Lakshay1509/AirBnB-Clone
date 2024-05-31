@@ -1,4 +1,4 @@
-import {wifi,car} from "../assets/index.js"
+import {wifi,car, gas, pool, breakfast, balcony, elevator, heater, ac, gym} from "../assets/index.js"
 
 
 export const perks = [
@@ -14,35 +14,46 @@ export const perks = [
     },
     {
         "id": 3,
-        "name": "Kitchen"
+        "name": "Kitchen",
+        "icon": gas
     },
     {
         "id": 4,
-        "name": "Pool"
+        "name": "Pool",
+        "icon": pool
     },
     {
         "id": 5,
-        "name": "Gym"
+        "name": "Gym",
+        "icon": gym
+
     },
     {
         "id": 6,
-        "name": "Breakfast"
+        "name": "Breakfast",
+        "icon": breakfast
+        
     },
     {
         "id": 7,
-        "name": "Balcony"
+        "name": "Balcony",
+        "icon": balcony
+
     },
     {
         "id": 8,
-        "name": "Elevator"
+        "name": "Elevator",
+        "icon": elevator
     },
     {
         "id": 9,
-        "name": "Heating"
+        "name": "Heating",
+        "icon": heater
     },
     {
         "id": 10,
-        "name": "AC"
+        "name": "AC",
+        "icon" : ac
 
     }
 ]
