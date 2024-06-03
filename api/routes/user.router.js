@@ -4,6 +4,8 @@ import {loginUser, registerUser, getUserProfile, logout} from '../controller/use
 
 import {verifyJWT} from '../middleware/auth.middleware.js';
 
+import {uploadByLink} from "../controller/media.controller.js"
+
 
 const router = Router();
 
@@ -20,5 +22,7 @@ router.route("/login").post(
 router.route("/profile").get(getUserProfile)
 
 router.route("/logout").post(logout)
+
+router.route("/upload-by-link").post(uploadByLink)
 
 export default router;

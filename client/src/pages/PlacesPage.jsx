@@ -1,6 +1,8 @@
 import React,{useState} from "react";
 import { Link, useParams } from "react-router-dom";
 import {perks} from "../constants/perks.js";
+import axios from "axios";
+
 
 const PlacesPage = () => {
   const { action } = useParams();
@@ -14,6 +16,23 @@ const PlacesPage = () => {
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [maxGuests, setMaxGuests] = useState(1);
+
+  async function addPhotoLink(e) {
+    e.preventDefault();
+
+    try {
+      const { data: filename} = await axios.post('/api/v1/users/upload-by-link', { link: photoLink });
+
+      const name = filename.data;
+      console.log(name)
+      setPhotos(prevPhotos => [...prevPhotos, { id: Date.now(), name}]);
+      
+      setPhotoLink('');
+
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+    }
+  }
 
   return (
     <div className="mt-8">
@@ -78,11 +97,23 @@ const PlacesPage = () => {
               onChange={(e)=>setPhotoLink(e.target.value)}
               
               />
-              <button className="bg-gray-200 px-4 rounded-2xl ">
+              <button className="bg-gray-200 px-4 rounded-2xl" onClick={addPhotoLink}>
                 Add&nbsp;Photo
               </button>
             </div>
-            <div className="mt-2 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <div className="mt-2 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+
+
+              {photos.length > 0 && photos.map((photo=>
+                <div >
+                  <ul>
+                    <li id={photo.id}>
+                      <img className="rounded-2xl max-w-full" src={`http://localhost:3000/uploads/${photo.name}`}/>
+                    </li>
+                  </ul>
+                </div>
+              ))}
+
               <button className="border bg-transparent rounded-2xl p-4 text-xl text-gray-500 flex gap-1 justify-center items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
