@@ -13,6 +13,7 @@ const __dirname = path.dirname(__filename);
 
 
 
+
 const uploadByLink = asyncHandler(async (req, res) => {
 
     const {link} = req.body;
@@ -31,4 +32,15 @@ const uploadByLink = asyncHandler(async (req, res) => {
 
 });
 
-export {uploadByLink}
+
+
+const uploadByDevice = asyncHandler(async (req, res) => {
+
+
+
+
+    
+});
+
+
+export {uploadByLink , uploadByDevice}
